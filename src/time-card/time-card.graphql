@@ -1,0 +1,27 @@
+type TimeCard {
+  id: ID!
+  userId: Int!
+  periodStart: Date
+  periodEnd: Date
+}
+
+input CreateTimeCardInput {
+  periodStart: Date
+  periodEnd: Date
+}
+
+input UpdateTimeCardInput {
+  periodStart: Date
+  periodEnd: Date
+}
+
+type Query {
+  timeCard: [TimeCard]!
+  timeCard(id: Int!): TimeCard
+}
+
+type Mutation {
+  createTimeCard(createTimeCardInput: CreateTimeCardInput!): TimeCard!
+  updateTimeCard(updateTimeCardInput: UpdateTimeCardInput!): TimeCard!
+  removeTimeCard(id: Int!): TimeCard
+}
