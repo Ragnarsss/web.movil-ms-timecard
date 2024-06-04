@@ -1,3 +1,5 @@
+scalar Date
+
 type TimeCard {
   id: ID!
   userId: Int!
@@ -6,8 +8,8 @@ type TimeCard {
 }
 
 input CreateTimeCardInput {
-  periodStart: Date
-  periodEnd: Date
+  userId: Int!
+  periodStart: Date!
 }
 
 input UpdateTimeCardInput {
@@ -16,12 +18,12 @@ input UpdateTimeCardInput {
 }
 
 type Query {
-  timeCard: [TimeCard]!
-  timeCard(id: Int!): TimeCard
+  findAll: [TimeCard]!
+  findOne(id: Int!): TimeCard
 }
 
 type Mutation {
-  createTimeCard(createTimeCardInput: CreateTimeCardInput!): TimeCard!
-  updateTimeCard(updateTimeCardInput: UpdateTimeCardInput!): TimeCard!
-  removeTimeCard(id: Int!): TimeCard
+  create(createTimeCardInput: CreateTimeCardInput!): TimeCard!
+  update(updateTimeCardInput: UpdateTimeCardInput!): TimeCard!
+  remove(id: Int!): TimeCard
 }

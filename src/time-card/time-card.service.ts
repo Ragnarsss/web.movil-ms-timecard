@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
+import { CreateTimeCardInput, UpdateTimeCardInput } from './dto/time-card.dto';
 import { TimeCard } from './entities/time-card.entity';
 
 @Injectable()
@@ -9,25 +10,32 @@ export class TimeCardService {
     private timeCardModel: typeof TimeCard,
   ) {}
 
-  create(createData) {
-    return this.timeCardModel.create(createData);
+  async create(createData: CreateTimeCardInput): Promise<TimeCard> {
+    const data = {
+      ...createData,
+    };
+    return await this.timeCardModel.create(data);
   }
 
-  findAll() {
-    return this.timeCardModel.findAll();
+  async findAll(): Promise<TimeCard[]> {
+    return await this.timeCardModel.findAll();
   }
 
-  findOne(id: number) {
-    return this.timeCardModel.findByPk(id);
+  async findOne(id: number): Promise<TimeCard> {
+    return await this.timeCardModel.findByPk(id);
   }
 
-  async update(id: number, updateTimeCardEntryDto) {
+  async update(
+    id: number,
+    updateTimeCardEntryDto: UpdateTimeCardInput,
+  ): Promise<TimeCard> {
     const timeCardEntry = await this.timeCardModel.findByPk(id);
-    return timeCardEntry.update(updateTimeCardEntryDto);
+    return await timeCardEntry.update(updateTimeCardEntryDto);
   }
 
-  async remove(id: number) {
+  async remove(id: number): Promise<boolean> {
     const timeCardEntry = await this.timeCardModel.findByPk(id);
-    return timeCardEntry.destroy();
+    await timeCardEntry.destroy();
+    return true;
   }
 }

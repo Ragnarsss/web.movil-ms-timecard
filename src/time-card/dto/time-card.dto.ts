@@ -1,35 +1,49 @@
-import { Field, InputType, ObjectType } from '@nestjs/graphql';
-import { IsDate, IsNotEmpty, IsNumber } from 'class-validator';
+import { Transform, Type } from 'class-transformer';
+import {
+  IsDate,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  MinDate,
+} from 'class-validator';
 
-@InputType()
 export class CreateTimeCardInput {
-  @Field()
-  @IsNotEmpty()
-  @IsDate()
-  startTime: Date;
-
-  @Field()
-  @IsNotEmpty()
-  @IsDate()
-  endTime: Date;
-
-  @Field()
   @IsNotEmpty()
   @IsNumber()
-  totalTime: number;
+  userId: number;
+
+  @Type(() => Date)
+  @IsDate()
+  @MinDate(new Date())
+  @IsNotEmpty()
+  @Transform(({ value, obj }) => {
+    const startDate = new Date(new Date(value).setHours(0, 0, 0, 0));
+    const endDate = new Date(startDate);
+    endDate.setDate(startDate.getDate() + 15);
+    obj.periodEnd = endDate;
+    return startDate;
+  })
+  periodStart: string;
+
+  @Type(() => Date)
+  @IsDate()
+  periodEnd: string;
 }
 
-@ObjectType()
-export class TimeCardType {
-  @Field()
-  id: number;
+export class UpdateTimeCardInput {
+  @IsOptional()
+  @IsNumber()
+  userId?: number;
 
-  @Field()
-  startTime: Date;
+  @Type(() => Date)
+  @IsOptional()
+  @IsDate()
+  @Transform(({ value }) => new Date(new Date(value).setHours(0, 0, 0, 0)))
+  periodStart?: string;
 
-  @Field()
-  endTime: Date;
-
-  @Field()
-  totalTime: number;
+  @Type(() => Date)
+  @IsOptional()
+  @IsDate()
+  @Transform(({ value }) => new Date(new Date(value).setHours(0, 0, 0, 0)))
+  periodEnd?: string;
 }

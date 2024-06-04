@@ -15,4 +15,20 @@ export class TimeCard extends Model {
     type: DataType.UUID,
   })
   id: string;
+
+  @Column({
+    type: DataType.INTEGER,
+    allowNull: false,
+  })
+  userId: number;
+
+  @Column({
+    type: DataType.DATE,
+  })
+  periodStart: Date;
+
+  @Column({
+    type: DataType.DATE,
+  })
+  periodEnd: Date;
 }
